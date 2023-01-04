@@ -42,7 +42,7 @@ class Keyword:
         self.proxy = proxy
         self.tweets_count = tweets_count
         self.posts_data = {}
-        self.retry = 10
+        self.retry = -1
         self.headless = headless
         self.browser_profile = browser_profile
 
@@ -66,10 +66,12 @@ class Keyword:
         try:
             all_ready_fetched_posts = []
             present_tweets = Finder.find_all_tweets(self.driver)
+            # print('Still finding..')
             self.check_tweets_presence(present_tweets)
             all_ready_fetched_posts.extend(present_tweets)
 
-            while len(self.posts_data) < self.tweets_count:
+            while len(self.posts_data) <= self.tweets_count:
+                print(self.retry)
                 for tweet in present_tweets:
                     name = Finder.find_name_from_tweet(tweet)
                     status, tweet_url = Finder.find_status(tweet)
@@ -128,8 +130,8 @@ class Keyword:
             self.start_driver()
             self.driver.get(self.URL)
             Utilities.wait_until_completion(self.driver)
-            Utilities.wait_until_tweets_appear(self.driver)
-            self.fetch_and_store_data()
+            if Utilities.wait_until_tweets_appear(self.driver):
+                self.fetch_and_store_data()
 
             self.close_driver()
             data = dict(list(self.posts_data.items())
@@ -214,6 +216,7 @@ def scrape_keyword(keyword: str, browser: str = "firefox", until: Union[str, Non
     """
     URL = Scraping_utilities.url_generator(keyword, since=since, until=until,
                                            since_id=since_id, max_id=max_id, within_time=within_time)
+    print(URL)
     keyword_bot = Keyword(keyword, browser=browser, url=URL,
                           proxy=proxy, tweets_count=tweets_count, headless=headless, browser_profile=browser_profile)
     data = keyword_bot.scrap()

@@ -85,12 +85,14 @@ class Scraping_utilities:
                     query += word
             query += keyword
             query = quote(query)
-            base_url = base_url + query + "&src=typed_query&f=live"
+            # base_url = base_url + query + "&src=typed_query&f=live"
+            base_url = base_url + query + "&src=typed_query"
         else:
             word = Scraping_utilities.set_value_or_none(
                 within_time, "within_time:")
             query = keyword + " " + word
-            base_url = base_url + quote(query) + "&src=typed_query&f=live"
+            # base_url = base_url + quote(query) + "&src=typed_query&f=live"
+            base_url = base_url + quote(query) + "&src=typed_query"
         return base_url
 
     @staticmethod

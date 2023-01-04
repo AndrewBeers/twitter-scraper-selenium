@@ -34,9 +34,12 @@ class Utilities:
         try:
             WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                 (By.CSS_SELECTOR, '[data-testid="tweet"]')))
+            return True
         except WebDriverException:
-            logger.exception(
-                "Tweets did not appear!, Try setting headless=False to see what is happening")
+            # logger.exception(
+                # "Tweets did not appear!, Try setting headless=False to see what is happening")
+            print('Empty list.')
+            return False
 
     @staticmethod
     def scroll_down(driver) -> None:
